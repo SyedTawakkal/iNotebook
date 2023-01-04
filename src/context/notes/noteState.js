@@ -3,6 +3,8 @@ import React, { useState } from "react";
 import NoteContext from "./noteContext";
 
 const NoteState = (props) => {
+  const authToken =
+    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYzYjU2MzYxODJlMDU3YzFjMTFkMWNkNiIsImlhdCI6MTY3MjgzMTg2OCwiZXhwIjoxNjcyODM1NDY4fQ.v_Ha7cACUa4_BvI1jtwhg8Hv4EWyWR-qTsVrwDNe2jk";
   // const [state, setState] = useState("");
   const host = "http://localhost:5000";
   const notesinitial = [];
@@ -15,7 +17,7 @@ const NoteState = (props) => {
       headers: {
         "Content-Type": "application/json",
         "auth-token":
-          "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYzYWQ2ZWI0OTQ1NDhkOGM4MmU2MDRlZiIsImlhdCI6MTY3MjMxMDQ2OCwiZXhwIjoxNjcyMzE0MDY4fQ.-DrpHJsinm1XUww-rEcFxkMeJ4_NH6BYeEWuk8GOd84",
+          "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYzYjU3MWU2NDFmZjM1NjRjY2RkYTIyMyIsImlhdCI6MTY3MjgzNTU4MiwiZXhwIjoxNjcyODM5MTgyfQ.fmAjeLltEJTWk8oV0plIJf2j6WyDmRDcatV1m6xECr8",
       },
     });
     const json = await response.json();
@@ -25,21 +27,25 @@ const NoteState = (props) => {
   //  add a Note
   const addNote = async (title, description, tag) => {
     // API CALL
-    const response = await fetch(`${host}/api/notes/addNote`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        "auth-token":
-          "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYzYWQ2ZWI0OTQ1NDhkOGM4MmU2MDRlZiIsImlhdCI6MTY3MjMxMDQ2OCwiZXhwIjoxNjcyMzE0MDY4fQ.-DrpHJsinm1XUww-rEcFxkMeJ4_NH6BYeEWuk8GOd84",
-      },
-      body: JSON.stringify({ title, description, tag }),
-    });
-    const note = await response.json();
-    console.log("below note here");
-    //check for object here different from harrys code
-    console.log(note.savedNotes);
-    const updatedNotes = notes.concat(note.savedNotes);
-    setNotes(updatedNotes);
+    try {
+      const response = await fetch(`${host}/api/notes/addNote`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "auth-token":
+            "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYzYjU3MWU2NDFmZjM1NjRjY2RkYTIyMyIsImlhdCI6MTY3MjgzNTU4MiwiZXhwIjoxNjcyODM5MTgyfQ.fmAjeLltEJTWk8oV0plIJf2j6WyDmRDcatV1m6xECr8",
+        },
+        body: JSON.stringify({ title, description, tag }),
+      });
+      const note = await response.json();
+      console.log("below note here");
+      //check for object here different from harrys code
+      console.log(note.savedNotes);
+      const updatedNotes = notes.concat(note.savedNotes);
+      setNotes(updatedNotes);
+    } catch (error) {
+      console.log(error.message);
+    }
   };
   // delete a Note
   const deleteNote = async (id) => {
@@ -49,7 +55,7 @@ const NoteState = (props) => {
       headers: {
         "Content-Type": "application/json",
         "auth-token":
-          "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYzYWQ2ZWI0OTQ1NDhkOGM4MmU2MDRlZiIsImlhdCI6MTY3MjMxMDQ2OCwiZXhwIjoxNjcyMzE0MDY4fQ.-DrpHJsinm1XUww-rEcFxkMeJ4_NH6BYeEWuk8GOd84",
+          "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYzYjU3MWU2NDFmZjM1NjRjY2RkYTIyMyIsImlhdCI6MTY3MjgzNTU4MiwiZXhwIjoxNjcyODM5MTgyfQ.fmAjeLltEJTWk8oV0plIJf2j6WyDmRDcatV1m6xECr8",
       },
     });
     const json = response.json();
@@ -62,27 +68,37 @@ const NoteState = (props) => {
   };
   // edit a note
   const editNote = async (id, title, description, tag) => {
-    // API CALL
-    const response = await fetch(
-      `${host}/api/notes/updateNotes/63ac2597d5bcf90766a51f24`,
-      {
-        method: "POST",
+    try {
+      console.log("Above edit fetch");
+      console.log(id);
+      // API CALL
+      const response = await fetch(`${host}/api/notes/updateNotes/${id}`, {
+        method: "PUT",
         headers: {
           "Content-Type": "application/json",
           "auth-token":
-            "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYzYWMxMTU4YTBjM2FhNjMwNmNlYzI4OCIsImlhdCI6MTY3MjIyNjE3NCwiZXhwIjoxNjcyMjI5Nzc0fQ.-jteJQz433GnWT-b5p9KyulPN4VwIxAdbWEqdj-pzYo",
+            "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYzYjU3MWU2NDFmZjM1NjRjY2RkYTIyMyIsImlhdCI6MTY3MjgzNTU4MiwiZXhwIjoxNjcyODM5MTgyfQ.fmAjeLltEJTWk8oV0plIJf2j6WyDmRDcatV1m6xECr8",
         },
-        body: JSON.stringify(title, description, tag),
+        body: JSON.stringify({ title, description, tag }),
+      });
+      console.log(response);
+      const json = await response.json();
+      console.log("req sent");
+      console.log(json);
+      let newNotes = JSON.parse(JSON.stringify(notes));
+      // const json = response.json();
+      for (let index = 0; index < newNotes.length; index++) {
+        const element = newNotes[index];
+        if (element._id === id) {
+          newNotes[index].title = title;
+          newNotes[index].description = description;
+          newNotes[index].tag = tag;
+          break;
+        }
       }
-    );
-    // const json = response.json();
-    for (let index = 0; index < notes.length; index++) {
-      const element = notes[index];
-      if (element._id === id) {
-        element.title = title;
-        element.description = description;
-        element.tag = tag;
-      }
+      setNotes(newNotes);
+    } catch (error) {
+      console.log(error.message);
     }
   };
   return (

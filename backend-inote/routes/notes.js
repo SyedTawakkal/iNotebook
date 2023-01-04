@@ -64,6 +64,7 @@ router.put("/updateNotes/:id", fetchUser, async (req, res) => {
     const { title, description, tag } = req.body;
     //create a new  notes obect
     console.log(title);
+    console.log("IN THE UPDATE NOTES BACKEND");
     const newNote = {};
     if (title) {
       newNote.title = title;

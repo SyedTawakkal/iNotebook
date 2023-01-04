@@ -11,7 +11,7 @@ const customCss = {
 const Noteitem = (props) => {
   const context = useContext(noteContext);
   const { deleteNote } = context;
-  const { note } = props;
+  const { note, updateNote } = props;
   return (
     <div className="col-md-3">
       <div className="card my-3">
@@ -30,6 +30,9 @@ const Noteitem = (props) => {
             icon={faPenToSquare}
             className="mx-2"
             style={customCss}
+            onClick={() => {
+              updateNote(note);
+            }}
           />
         </div>
       </div>

@@ -19,9 +19,10 @@ router.post(
     body("password", "Enter a Valid password").isLength({ min: 5 }),
   ],
   async (req, res) => {
+    let success = false;
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
-      return res.status(400).json({ errors: errors.array() });
+      return res.status(400).json({ success, errors: errors.array() });
     }
     try {
       let user = User.findOne({ email: req.body.email }, function (err, docs) {
@@ -33,6 +34,7 @@ router.post(
       });
       if (!user === null) {
         return res.status(400).json({
+          success,
           status: "Failed1",
           message: "user already exists",
         });
@@ -56,7 +58,8 @@ router.post(
       });
       console.log(authToken);
       console.log("Final request");
-      return res.json({ authToken });
+      success = true;
+      return res.json({ success, authToken });
     } catch (err) {
       console.log(err);
       return res.status(500).send("Internal Server Error-1");
@@ -71,6 +74,7 @@ router.post(
     body("password", "Enter a Valid password").exists(),
   ],
   async (req, res) => {
+    let success = false;
     console.log("In LOGIN");
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
@@ -80,15 +84,17 @@ router.post(
     try {
       let user = await User.findOne({ email: email });
       if (!user) {
+        success = false;
         return res
           .status(500)
           .json({ error: "please enter correct credentials" });
       }
       const passwordCompare = await bcrypt.compare(password, user.password);
       if (!passwordCompare) {
+        success = false;
         return res
           .status(500)
-          .json({ error: "please enter correct credentials" });
+          .json({ success, error: "please enter correct credentials" });
       }
       const data = {
         id: user.id,
@@ -97,7 +103,8 @@ router.post(
         expiresIn: "1h",
       });
       console.log(authToken);
-      return res.json({ authToken });
+      success = true;
+      return res.json({ success, authToken });
     } catch (err) {
       console.log(err);
       return res.status(500).send("Internal Server Error");
