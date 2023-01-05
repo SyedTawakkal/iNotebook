@@ -2,7 +2,7 @@ import React, { useState } from "react";
 // react-router-dom v6 useHistory is now useNavigate
 import { useNavigate } from "react-router-dom";
 
-const Login = () => {
+const Login = (props) => {
   const [credentials, setcredentials] = useState({ email: "", password: "" });
   let navigate = useNavigate();
   const handleSubmit = async (e) => {
@@ -22,17 +22,21 @@ const Login = () => {
     if (json.success) {
       //Save the auth token and redirect
       localStorage.setItem("token", json.authToken);
+      props.showAlert("Logged in successfully", "success");
       navigate("/");
     } else {
-      alert("invalid credentials");
+      props.showAlert("Invalid Credentials", "danger");
     }
   };
   const onChange = (e) => {
     setcredentials({ ...credentials, [e.target.name]: e.target.value });
   };
   return (
-    <div>
-      <form onSubmit={handleSubmit}>
+    <div className="mt-3">
+      <h3 style={{ textAlign: "center", marginBottom: "20px" }}>
+        Login to inotebook
+      </h3>
+      <form onSubmit={handleSubmit} className="form-i">
         <div className="mb-3">
           <label htmlFor="email" className="form-label">
             Email address
@@ -40,7 +44,7 @@ const Login = () => {
           <input
             type="email"
             name="email"
-            className="form-control"
+            className="form-control inp-i"
             id="email"
             aria-describedby="emailHelp"
             value={credentials.email}
@@ -54,7 +58,7 @@ const Login = () => {
           <input
             type="password"
             name="password"
-            className="form-control"
+            className="form-control inp-i"
             id="password"
             value={credentials.password}
             onChange={onChange}
@@ -63,7 +67,7 @@ const Login = () => {
         <div className="mb-3 form-check">
           <input
             type="checkbox"
-            className="form-check-input"
+            className="form-check-input inp-i"
             id="exampleCheck1"
           />
           <label className="form-check-label" htmlFor="exampleCheck1">

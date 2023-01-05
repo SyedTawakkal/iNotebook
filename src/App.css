@@ -2,3 +2,12 @@
   width:100%;
   background-size: cover;
 }
+.inp-i{
+  max-width: 300px;
+}
+.form-i{
+  max-width: 300px;
+
+  position: relative;
+  margin: auto;
+}

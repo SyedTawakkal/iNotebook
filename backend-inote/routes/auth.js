@@ -53,15 +53,17 @@ router.post(
           id: user.id,
         },
       };
-      const authToken = jwt.sign(data, secretKey, {
-        expiresIn: "1h",
-      });
+      // to keep auth-token-active-for 1-hr
+      // const authToken = jwt.sign(data, secretKey, {
+      //   expiresIn: "1h",
+      // });
+      const authToken = jwt.sign(data, secretKey);
       console.log(authToken);
       console.log("Final request");
       success = true;
       return res.json({ success, authToken });
     } catch (err) {
-      console.log(err);
+      console.log(err.message);
       return res.status(500).send("Internal Server Error-1");
     }
   }
@@ -99,14 +101,12 @@ router.post(
       const data = {
         id: user.id,
       };
-      const authToken = jwt.sign(data, secretKey, {
-        expiresIn: "1h",
-      });
+      const authToken = jwt.sign(data, secretKey);
       console.log(authToken);
       success = true;
       return res.json({ success, authToken });
     } catch (err) {
-      console.log(err);
+      console.log(err.message);
       return res.status(500).send("Internal Server Error");
     }
   }

@@ -24,6 +24,7 @@ const Noteitem = (props) => {
             style={customCss}
             onClick={() => {
               deleteNote(note._id);
+              props.showAlert("Deleted Successfully", "success");
             }}
           />
           <FontAwesomeIcon
